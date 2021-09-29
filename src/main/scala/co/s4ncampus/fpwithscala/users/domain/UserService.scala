@@ -9,6 +9,8 @@ class UserService[F[_]](repository: UserRepositoryAlgebra[F], validation: UserVa
       _ <- validation.doesNotExist(user)
       saved <- EitherT.liftF(repository.create(user))
     } yield saved
+
+  def getByLegalId(legalId: String): OptionT[F, User] = repository.findByLegalId(legalId)
 }
 
 object UserService{

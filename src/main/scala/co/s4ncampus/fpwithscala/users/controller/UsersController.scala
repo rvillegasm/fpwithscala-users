@@ -32,15 +32,18 @@ class UsersController[F[_]: Sync] extends Http4sDsl[F] {
                 }
         }
 
-    private def getUser(): HttpRoutes[F] =
+    private def getUserByLegalId(userService: UserService[F]): HttpRoutes[F] =
         HttpRoutes.of[F] {
-            case GET -> Root =>
-                Ok("Hi")
+            case GET -> Root / legalId =>
+                userService.getByLegalId(legalId).value.flatMap {
+                    case Some(user) => Ok(user.asJson)
+                    case None => Conflict(s"The user with legal id $legalId does not exist")
+                }
         }
 
     def endpoints(userService: UserService[F]): HttpRoutes[F] = {
         //To convine routes use the function `<+>`
-        createUser(userService) <+> getUser()
+        createUser(userService) <+> getUserByLegalId(userService)
     }
 
 }
