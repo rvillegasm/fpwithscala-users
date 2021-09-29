@@ -21,6 +21,15 @@ private object UserSQL {
     WHERE LEGAL_ID = $legalId
   """.query[User]
 
+  def updateUser(user: User): Update0 = sql"""
+    UPDATE USERS SET LEGAL_ID = ${user.legalId},
+    FIRST_NAME = ${user.firstName},
+    LAST_NAME = ${user.lastName},
+    EMAIL = ${user.email},
+    PHONE = ${user.phone},
+    WHERE LEGAL_ID = ${user.legalId}
+  """.update
+
 }
 
 class DoobieUserRepositoryInterpreter[F[_]: Bracket[?[_], Throwable]](val xa: Transactor[F])
@@ -31,6 +40,9 @@ class DoobieUserRepositoryInterpreter[F[_]: Bracket[?[_], Throwable]](val xa: Tr
     insert(user).withUniqueGeneratedKeys[Long]("ID").map(id => user.copy(id = id.some)).transact(xa)
 
   def findByLegalId(legalId: String): OptionT[F, User] = OptionT(selectByLegalId(legalId).option.transact(xa))
+
+  def update(user: User): F[User] = updateUser(user).run.transact(xa)
+
 
 }
 
