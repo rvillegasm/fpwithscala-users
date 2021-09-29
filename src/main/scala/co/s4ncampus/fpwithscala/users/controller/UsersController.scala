@@ -32,9 +32,15 @@ class UsersController[F[_]: Sync] extends Http4sDsl[F] {
                 }
         }
 
+    private def getUser(): HttpRoutes[F] =
+        HttpRoutes.of[F] {
+            case GET -> Root =>
+                Ok("Hi")
+        }
+
     def endpoints(userService: UserService[F]): HttpRoutes[F] = {
         //To convine routes use the function `<+>`
-        createUser(userService)
+        createUser(userService) <+> getUser()
     }
 
 }
