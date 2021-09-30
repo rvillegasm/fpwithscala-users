@@ -10,16 +10,23 @@ Clone the repository locally from [Github](https://github.com/rvillegasm/fpwiths
 git clone https://github.com/rvillegasm/fpwithscala-users.git
 ```
 
-Make sure you have [***Scala 2.13.x***](https://www.scala-lang.org/download/scala2.html) installed and a compatible version of [***Sbt***](https://www.scala-sbt.org/download.html) to run the project.
+Make sure you have [***Scala 2.13.x***](https://www.scala-lang.org/download/scala2.html) installed and a compatible version of [***Sbt***](https://www.scala-sbt.org/download.html) to run the project, as well as [***Docker***](https://docs.docker.com/get-docker/) and [***Docker Compose***](https://docs.docker.com/compose/install/) (in order to run the database).
 
 **Note:** Other versions of scala have not been tested. They may work... or not.
 
 
 ## Usage
 
-Get inside the cloned directory and then run the server simply by executing:
+Get inside the cloned directory by issuing:
 ```bash
 cd fpwithscala-users
+```
+Then start the PostgreSQL database using docker:
+```bash
+docker-compose up -d
+```
+Finally, start the server simply by running:
+```bash
 sbt run
 ```
 
@@ -121,4 +128,4 @@ Developed by:
 - [Rafael Villegas](https://github.com/rvillegasm)
 
 ## Acknowledgements
-This would not have been possible without our teachers Juan Francisco Cardona and Carlos Mario Zuluaga. Also, shoutouts to Lina Murcia, Daniel Benavides and everyone at S4N/EPAM Latam!.
+This would not have been possible without our teachers Carlos Mario Zuluaga and Juan Francisco Cardona. Also, shout-out to Lina Murcia, Daniel Benavides and everyone at S4N/EPAM Latam!.
