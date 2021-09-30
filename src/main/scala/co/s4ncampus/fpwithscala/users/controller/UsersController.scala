@@ -34,6 +34,7 @@ class UsersController[F[_]: Sync] extends Http4sDsl[F] {
 
     private def getUserByLegalId(userService: UserService[F]): HttpRoutes[F] =
         HttpRoutes.of[F] {
+            case req @ GET -> Root if req.params.isEmpty => Ok("")
             case GET -> Root / legalId =>
                 userService.getByLegalId(legalId).value.flatMap {
                     case Some(user) => Ok(user.asJson)
