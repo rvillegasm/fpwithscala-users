@@ -21,10 +21,18 @@ private object UserSQL {
     WHERE LEGAL_ID = $legalId
   """.query[User]
 
+  def updateUser(user: User): Update0 = sql"""
+    UPDATE USERS SET LEGAL_ID = ${user.legalId},
+    FIRST_NAME = ${user.firstName},
+    LAST_NAME = ${user.lastName},
+    EMAIL = ${user.email},
+    PHONE = ${user.phone}
+    WHERE LEGAL_ID = ${user.legalId}
+ """.update
+
   def removeByLegalId(legalId: String): Update0 = sql"""
     DELETE FROM USERS WHERE LEGAL_ID = $legalId
   """.update
-
 }
 
 class DoobieUserRepositoryInterpreter[F[_]: Bracket[?[_], Throwable]](val xa: Transactor[F])
@@ -36,7 +44,10 @@ class DoobieUserRepositoryInterpreter[F[_]: Bracket[?[_], Throwable]](val xa: Tr
 
   def findByLegalId(legalId: String): OptionT[F, User] = OptionT(selectByLegalId(legalId).option.transact(xa))
 
+  def update(user: User): F[User] = updateUser(user).withUniqueGeneratedKeys[Long]("ID").map(id => user.copy(id = id.some)).transact(xa)
+
   def deleteByLegalId(legalId: String): F[Int] = removeByLegalId(legalId).run.transact(xa)
+
 }
 
 object DoobieUserRepositoryInterpreter {

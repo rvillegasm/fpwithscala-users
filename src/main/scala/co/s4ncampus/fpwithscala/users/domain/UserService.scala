@@ -13,11 +13,18 @@ class UserService[F[_]](repository: UserRepositoryAlgebra[F], validation: UserVa
 
   def getByLegalId(legalId: String): OptionT[F, User] = repository.findByLegalId(legalId)
 
-  def deleteByLegalId(legalID: String)(implicit M: Monad[F]): EitherT[F, UserDoesNotExistsError, Int] =
+  def update(user: User)(implicit M: Monad[F]): EitherT[F, UserDoesNotExistError, User] =
+    for {
+      _ <- validation.exists(user.legalId)
+      saved <- EitherT.liftF(repository.update(user))
+    } yield saved
+
+  def deleteByLegalId(legalID: String)(implicit M: Monad[F]): EitherT[F, UserDoesNotExistError, Int] =
     for {
       _ <- validation.exists(legalID)
       deleted <- EitherT.liftF(repository.deleteByLegalId(legalID))
     } yield deleted
+
 
 }
 
