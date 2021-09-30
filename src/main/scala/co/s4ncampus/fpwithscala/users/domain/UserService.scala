@@ -12,9 +12,9 @@ class UserService[F[_]](repository: UserRepositoryAlgebra[F], validation: UserVa
 
   def getByLegalId(legalId: String): OptionT[F, User] = repository.findByLegalId(legalId)
 
-  def update(user: User)(implicit M: Monad[F]): EitherT[F, UserAlreadyExistsError, User] =
+  def update(user: User)(implicit M: Monad[F]): EitherT[F, UserDoesNotExistError, User] =
     for {
-      //_ <- validation.doesNotExist(user)
+      _ <- validation.exists(user.legalId)
       saved <- EitherT.liftF(repository.update(user))
     } yield saved
 
