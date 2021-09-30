@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  postgres:
+    image: "postgres:latest"
+    container_name: '${DB_NAME}-database'
+    restart: always
+    volumes:
+      - './postgres_data:/var/lib/postgresql/data'
+    environment:
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "${HOST_MACHINE_POSTGRES_PORT}:5432"
+
