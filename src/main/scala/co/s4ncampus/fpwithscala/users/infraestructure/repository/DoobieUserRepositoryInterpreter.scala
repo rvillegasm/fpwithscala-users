@@ -21,6 +21,10 @@ private object UserSQL {
     WHERE LEGAL_ID = $legalId
   """.query[User]
 
+  def removeByLegalId(legalId: String): Update0 = sql"""
+    DELETE FROM USERS WHERE LEGAL_ID = $legalId
+  """.update
+
 }
 
 class DoobieUserRepositoryInterpreter[F[_]: Bracket[?[_], Throwable]](val xa: Transactor[F])
@@ -32,6 +36,7 @@ class DoobieUserRepositoryInterpreter[F[_]: Bracket[?[_], Throwable]](val xa: Tr
 
   def findByLegalId(legalId: String): OptionT[F, User] = OptionT(selectByLegalId(legalId).option.transact(xa))
 
+  def deleteByLegalId(legalId: String): F[Int] = removeByLegalId(legalId).run.transact(xa)
 }
 
 object DoobieUserRepositoryInterpreter {

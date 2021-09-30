@@ -5,4 +5,6 @@ import cats.data.EitherT
 trait UserValidationAlgebra[F[_]] {
   /* Fails with a UserAlreadyExistsError */
   def doesNotExist(user: User): EitherT[F, UserAlreadyExistsError, Unit]
+  /* Fails with a UserDoesNotExistsError */
+  def exists(legalId: String): EitherT[F, UserDoesNotExistsError, User]
 }

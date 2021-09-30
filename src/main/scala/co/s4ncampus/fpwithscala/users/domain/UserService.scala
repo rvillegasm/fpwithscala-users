@@ -4,6 +4,7 @@ import cats.data._
 import cats.Monad
 
 class UserService[F[_]](repository: UserRepositoryAlgebra[F], validation: UserValidationAlgebra[F]) {
+
   def create(user: User)(implicit M: Monad[F]): EitherT[F, UserAlreadyExistsError, User] =
     for {
       _ <- validation.doesNotExist(user)
@@ -11,6 +12,13 @@ class UserService[F[_]](repository: UserRepositoryAlgebra[F], validation: UserVa
     } yield saved
 
   def getByLegalId(legalId: String): OptionT[F, User] = repository.findByLegalId(legalId)
+
+  def deleteByLegalId(legalID: String)(implicit M: Monad[F]): EitherT[F, UserDoesNotExistsError, Int] =
+    for {
+      _ <- validation.exists(legalID)
+      deleted <- EitherT.liftF(repository.deleteByLegalId(legalID))
+    } yield deleted
+
 }
 
 object UserService{
