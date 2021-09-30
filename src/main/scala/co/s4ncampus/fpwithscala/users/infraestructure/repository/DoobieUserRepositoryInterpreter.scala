@@ -8,7 +8,7 @@ import doobie._
 import doobie.implicits._
 import cats.effect.Bracket
 
-private object UserSQL {
+object UserSQL {
 
   def insert(user: User): Update0 = sql"""
     INSERT INTO users (legal_id, first_name, last_name, email, phone)
