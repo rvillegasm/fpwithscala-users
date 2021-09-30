@@ -1,6 +1,6 @@
 # fpwithscala-users
 
-fpwithscala-users is a Scala web back-end for dealing user creation, deletion, modification and querying by leveraging the capabilities of http4s, doobie, cats and more libraries.
+fpwithscala-users is a Scala web back-end for dealing with user creation, deletion, modification and querying by leveraging the capabilities of http4s, doobie, cats and more libraries.
 
 ## Setup
 
