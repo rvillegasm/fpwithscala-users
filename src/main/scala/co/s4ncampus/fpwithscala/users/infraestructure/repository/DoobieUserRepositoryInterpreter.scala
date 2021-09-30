@@ -11,27 +11,27 @@ import cats.effect.Bracket
 object UserSQL {
 
   def insert(user: User): Update0 = sql"""
-    INSERT INTO USERS (LEGAL_ID, FIRST_NAME, LAST_NAME, EMAIL, PHONE)
+    INSERT INTO users (legal_id, first_name, last_name, email, phone)
     VALUES (${user.legalId}, ${user.firstName}, ${user.lastName}, ${user.email}, ${user.phone})
   """.update
 
   def selectByLegalId(legalId: String): Query0[User] = sql"""
-    SELECT ID, LEGAL_ID, FIRST_NAME, LAST_NAME, EMAIL, PHONE
-    FROM USERS
-    WHERE LEGAL_ID = $legalId
+    SELECT id, legal_id, first_name, last_name, email, phone
+    FROM users
+    WHERE legal_id = $legalId
   """.query[User]
 
   def updateUser(user: User): Update0 = sql"""
-    UPDATE USERS SET LEGAL_ID = ${user.legalId},
-    FIRST_NAME = ${user.firstName},
-    LAST_NAME = ${user.lastName},
-    EMAIL = ${user.email},
-    PHONE = ${user.phone}
-    WHERE LEGAL_ID = ${user.legalId}
+    UPDATE users SET legal_id = ${user.legalId},
+    first_name = ${user.firstName},
+    last_name = ${user.lastName},
+    email = ${user.email},
+    phone = ${user.phone}
+    WHERE legal_id = ${user.legalId}
  """.update
 
   def removeByLegalId(legalId: String): Update0 = sql"""
-    DELETE FROM USERS WHERE LEGAL_ID = $legalId
+    DELETE FROM users WHERE legal_id = $legalId
   """.update
 }
 
