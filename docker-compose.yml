@@ -3,12 +3,14 @@ version: "3"
 services:
   postgres:
     image: "postgres:latest"
-    container_name: '${DB_NAME}-database'
+    container_name: '${DB_CONTAINER_NAME}-database'
     restart: always
     volumes:
-      - './postgres_data:/var/lib/postgresql/data'
+      - './postgres_data:/var/lib/postgresql/data' 
+      - ${POSTGRES_INIT_PATH}:/docker-entrypoint-initdb.d/init.sql
     environment:
-      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     ports:
       - "${HOST_MACHINE_POSTGRES_PORT}:5432"
 
