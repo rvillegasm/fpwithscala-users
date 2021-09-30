@@ -43,7 +43,7 @@ class UsersController[F[_]: Sync] extends Http4sDsl[F] {
 
     private def updateUser(userService: UserService[F]): HttpRoutes[F] = 
         HttpRoutes.of[F] {
-            case req @ UPDATE -> Root =>
+            case req @ PUT -> Root =>
                 val action = for {
                     user <- req.as[User]
                     result <- userService.update(user).value

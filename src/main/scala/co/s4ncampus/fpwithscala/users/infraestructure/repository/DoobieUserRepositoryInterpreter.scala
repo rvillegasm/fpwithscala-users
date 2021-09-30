@@ -41,7 +41,7 @@ class DoobieUserRepositoryInterpreter[F[_]: Bracket[?[_], Throwable]](val xa: Tr
 
   def findByLegalId(legalId: String): OptionT[F, User] = OptionT(selectByLegalId(legalId).option.transact(xa))
 
-  def update(user: User): F[User] = updateUser(user).run.transact(xa)
+  def update(user: User): F[User] = updateUser(user).run.transact(xa) //TODO pasarlo a option?
 
 
 }
