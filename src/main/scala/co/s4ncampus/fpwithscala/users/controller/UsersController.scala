@@ -34,12 +34,14 @@ class UsersController[F[_]: Sync] extends Http4sDsl[F] {
 
     private def getUserByLegalId(userService: UserService[F]): HttpRoutes[F] =
         HttpRoutes.of[F] {
+            case req @ GET -> Root if req.params.isEmpty => Ok("")
             case GET -> Root / legalId =>
                 userService.getByLegalId(legalId).value.flatMap {
                     case Some(user) => Ok(user.asJson)
                     case None => Conflict(s"The user with legal id $legalId does not exist")
                 }
         }
+
 
     private def updateUser(userService: UserService[F]): HttpRoutes[F] = 
         HttpRoutes.of[F] {
@@ -52,12 +54,23 @@ class UsersController[F[_]: Sync] extends Http4sDsl[F] {
                 action.flatMap {
                     case Right(saved) => Ok(saved.asJson)
                     case Left(UserDoesNotExistError(legalId)) => Conflict(s"The user with legal id ${legalId} does not exist")
+
+    private def deleteUserByLegalId(userService: UserService[F]): HttpRoutes[F] =
+        HttpRoutes.of[F] {
+            case req @ DELETE -> Root if req.params.isEmpty => Conflict("Please specify the legalId of the user to be deleted")
+            case DELETE -> Root / legalId =>
+                userService.deleteByLegalId(legalId).value.flatMap {
+                    case Right(_) => Ok(s"User with legalId $legalId has been successfully deleted")
+                    case Left(UserDoesNotExistsError(legalId)) => Conflict(s"The user with legal id $legalId does not exist")
+
                 }
         }
 
     def endpoints(userService: UserService[F]): HttpRoutes[F] = {
         //To convine routes use the function `<+>`
-        createUser(userService) <+> getUserByLegalId(userService) <+> updateUser(userService)
+
+        createUser(userService) <+> getUserByLegalId(userService) <+> updateUser(userService) <+> deleteUserByLegalId(userService)
+
     }
 
 }
