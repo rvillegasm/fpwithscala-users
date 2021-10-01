@@ -1,3 +1,6 @@
+enablePlugins(JavaAppPackaging)
+enablePlugins(DockerPlugin)
+
 val CatsVersion = "2.2.0"
 val Http4sVersion = "0.21.16"
 val CirceVersion = "0.13.0"

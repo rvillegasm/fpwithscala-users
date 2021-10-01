@@ -1,9 +1,9 @@
 version: "3"
 
 services:
-  postgres:
+  database:
     image: "postgres:latest"
-    container_name: '${DB_CONTAINER_NAME}-database'
+    container_name: '${DB_CONTAINER_NAME}'
     restart: always
     volumes:
       - './postgres_data:/var/lib/postgresql/data' 
@@ -13,3 +13,14 @@ services:
     ports:
       - "${HOST_MACHINE_POSTGRES_PORT}:5432"
 
+
+  appscala:
+    image: "users:0.0.1-SNAPSHOT"
+    container_name: '${APPSCALA_CONTAINER_NAME}'
+    links:
+      - database
+    restart: 'always'
+    ports:
+      - "${HOST_MACHINE_APPSCALA_PORT}:8000"
+    depends_on:
+      - database
