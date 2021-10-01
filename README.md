@@ -120,6 +120,12 @@ Request format example:
 curl -X DELETE http://localhost:8000/users/104
 ```
 
+## Testing
+To test the app, just cd into the directory and issue:
+```bash
+sbt test
+```
+
 ## Credits
 Developed by:
 - [Daniel Otero](https://github.com/danoteroS4N)
