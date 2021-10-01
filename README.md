@@ -21,13 +21,13 @@ Get inside the cloned directory by issuing:
 ```bash
 cd fpwithscala-users
 ```
-Then start the PostgreSQL database using docker:
+Then build the docker image for the Scala app using:
+```bash
+sbt docker:publishLocal
+```
+Finally, start the PostgreSQL database and the server with:
 ```bash
 docker-compose up -d
-```
-Finally, start the server simply by running:
-```bash
-sbt run
 ```
 
 From then on, you can start making Http requests to the app on the address *http://localhost:8000*, by abiding to the following set of requirementes for each Http method:
